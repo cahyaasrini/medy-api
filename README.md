@@ -5,4 +5,6 @@ Running in [heroku](https://medy-api.herokuapp.com/) and [gcloud](https://medy-3
 * /medicince/**name**
   
 * /category/**cat** 
+
+* /details/**id**
   
