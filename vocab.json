@@ -2,83 +2,83 @@
     {
         "a": [
             {
-                "0": "acne"
+                "indication": "acne"
             },
             {
-                "1": "arthritis"
+                "indication": "arthritis"
             },
             {
-                "2": "asthma"
+                "indication": "asthma"
             }
         ]
     },
     {
         "b": [
             {
-                "0": "backache"
+                "indication": "backache"
             },
             {
-                "1": "brighten skin"
+                "indication": "brighten skin"
             },
             {
-                "2": "bruises"
+                "indication": "bruises"
             }
         ]
     },
     {
         "c": [
             {
-                "0": "cramps"
+                "indication": "cramps"
             },
             {
-                "1": "cold"
+                "indication": "cold"
             },
             {
-                "2": "constipation"
+                "indication": "constipation"
             },
             {
-                "3": "cough"
+                "indication": "cough"
             }
         ]
     },
     {
         "d": [
             {
-                "0": "diarrhea"
+                "indication": "diarrhea"
             }
         ]
     },
     {
         "e": [
             {
-                "0": "eczema"
+                "indication": "eczema"
             }
         ]
     },
     {
         "f": [
             {
-                "0": "fever"
+                "indication": "fever"
             }
         ]
     },
     {
         "g": [
             {
-                "0": "gastritis"
+                "indication": "gastritis"
             }
         ]
     },
     {
         "h": [
             {
-                "0": "hand sanitizer"
+                "indication": "hand sanitizer"
             },
             {
-                "1": "headache"
+                "indication": "headache"
             },
             {
-                "2": "handwashing"
+                "indication": "handwashing"
             }
         ]
     },
@@ -97,10 +97,10 @@
     {
         "m": [
             {
-                "0": "menstrual pain"
+                "indication": "menstrual pain"
             },
             {
-                "1": "moisturize skin"
+                "indication": "moisturize skin"
             }
         ]
     },
@@ -113,7 +113,7 @@
     {
         "p": [
             {
-                "0": "pain reliever"
+                "indication": "pain reliever"
             }
         ]
     },
@@ -123,51 +123,51 @@
     {
         "r": [
             {
-                "0": "runny nose"
+                "indication": "runny nose"
             }
         ]
     },
     {
         "s": [
             {
-                "0": "sprains"
+                "indication": "sprains"
             },
             {
-                "1": "strains"
+                "indication": "strains"
             }
         ]
     },
     {
         "t": [
             {
-                "0": "tootache"
+                "indication": "tootache"
             },
             {
-                "1": "teeth"
+                "indication": "teeth"
             },
             {
-                "2": "toner"
+                "indication": "toner"
             }
         ]
     },
     {
         "u": [
             {
-                "0": "urination"
+                "indication": "urination"
             }
         ]
     },
     {
         "v": [
             {
-                "0": "vomit"
+                "indication": "vomit"
             }
         ]
     },
     {
         "w": [
             {
-                "0": "wrinkle"
+                "indication": "wrinkle"
             }
         ]
     },

@@ -4,6 +4,8 @@ from flask_cors import CORS
 import json 
 import pandas as pd
 
+# import recs 
+
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
@@ -67,11 +69,16 @@ class keywords(Resource):
 
                 return result # no need []             
                 
+class recommend(Resource):
+    def get(self, upc): 
+        return recs.recommend(int(upc))
+
 
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
 api.add_resource(keywords, '/keywords/<key>')
+api.add_resource(recommend,'/recommend/<string:upc>')
 
 if __name__ == '__main__':
     app.run()

@@ -15,7 +15,7 @@ df = pd.read_csv(filepath)
 result = [
             {abj: 
                     [
-                        {i: word.strip()} for i, word in enumerate(df[abj]) if str(word) != 'nan'
+                        {"indication": word.strip()} for word in df[abj] if str(word) != 'nan'
                     ]
             } for abj in df.columns                                                  
         ]
