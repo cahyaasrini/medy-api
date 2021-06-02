@@ -19,56 +19,25 @@ class status(Resource):
 
 class medicine(Resource):
     def get(self, name):
-        df = pd.read_csv(filename)
-        # with open(filename) as f: 
-        #     file = json.load(f) 
-
         if name == "all":
-            # output = [file[str(i)] for i in range(len(file))] 
-            # return output
-            df = df.to_dict('records')
-
-            result = []
-            attrs = ['category', 'brand_name', 'effective_time',
-                    'purpose', 'indications_and_usage', 
-                    'active_ingredient', 'inactive_ingredient',
-                    'dosage_and_administration', 'warnings']
-
-            for i in range(len(df)):
-                temp = {}
-                temp['id'] = df[i]['label_id']
-                
-                for attr in attrs:
-                    if attr == 'id':
-                        temp[attr] = df[i]['label_id']
-                    elif attr == 'effective_time': 
-                        temp[attr] = df[i]['label_effective_time']
-                    else: 
-                        temp[attr] = df[i][attr]
-
-                result.append(temp)
-
+            result = [pack(i) for i in range(len(df))]
             return result
-            # print(result)
         else: 
-            # names = [file[str(i)]['brand_name'].lower() for i in range(len(file))] 
             names = list(df['brand_name'])
             req = name.lower()
             show = [] 
             
             for i, name in enumerate(names): 
                 if req in name.lower(): 
-                    show.append(names[i])
+                    show.append(pack(i))
 
             return show[:10]
 
 class details(Resource):
     def get(self, id): 
-        with open(filename) as f: 
-            file = json.load(f) 
-            for i in range(len(file)):
-                if file[str(i)]['id'] == id:
-                    return [file[str(i)]]
+        for i in range(len(df)):
+            if dict_df[i]['label_id'] == id:
+                return [pack(i)]
 
 class keywords(Resource):
     def get(self, key):
@@ -89,7 +58,26 @@ class keywords(Resource):
                 
                 result = file[num][key]    
 
-                return result # no need []             
+                return result # no need []            
+
+def pack(i):
+    attrs = ['id', 'category', 'brand_name', 'effective_time',
+            'purpose', 'indications_and_usage', 
+            'active_ingredient', 'inactive_ingredient',
+            'dosage_and_administration', 'warnings']
+
+    temp = {}
+    for attr in attrs:
+        if attr == 'id':
+            temp[attr] = dict_df[i]['label_id']
+        elif attr == 'effective_time': 
+            temp[attr] = dict_df[i]['label_effective_time']
+        else: 
+            temp[attr] = dict_df[i][attr]
+
+    return temp 
+
+ 
                  
 
 
@@ -102,4 +90,6 @@ api.add_resource(keywords, '/keywords/<key>')
 if __name__ == '__main__':
     # filename = 'bangkit_0323_dataset.json'
     filename = 'medy-sample-dataset.csv'
+    df = pd.read_csv(filename)
+    dict_df = df.to_dict('records')
     app.run()
