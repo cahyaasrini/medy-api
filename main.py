@@ -5,6 +5,22 @@ import json
 import pandas as pd
 
 # import recs 
+def pack(i, dict_df):
+    attrs = ['id', 'category', 'brand_name', 'effective_time',
+            'purpose', 'indications_and_usage', 
+            'active_ingredient', 'inactive_ingredient',
+            'dosage_and_administration', 'warnings']
+
+    temp = {}
+    for attr in attrs:
+        if attr == 'id':
+            temp[attr] = dict_df[i]['label_id']
+        elif attr == 'effective_time': 
+            temp[attr] = dict_df[i]['label_effective_time']
+        else: 
+            temp[attr] = dict_df[i][attr]
+
+    return temp 
 
 app = Flask(__name__)
 api = Api(app)
@@ -19,8 +35,12 @@ class status(Resource):
 
 class medicine(Resource):
     def get(self, name):
+        filename = 'medy-sample-dataset.csv'
+        df = pd.read_csv(filename)
+        dict_df = df.to_dict('records')
+        
         if name == "all":
-            result = [pack(i) for i in range(len(df))]
+            result = [pack(i, dict_df) for i in range(len(df))]
             return result
         else: 
             names = list(df['brand_name'])
@@ -29,15 +49,19 @@ class medicine(Resource):
             
             for i, name in enumerate(names): 
                 if req in name.lower(): 
-                    show.append(pack(i))
+                    show.append(pack(i, dict_df))
 
             return show[:10]
 
 class details(Resource):
     def get(self, id): 
+        filename = 'medy-sample-dataset.csv'
+        df = pd.read_csv(filename)
+        dict_df = df.to_dict('records')
+        
         for i in range(len(df)):
             if dict_df[i]['label_id'] == id:
-                return [pack(i)]
+                return [pack(i, dict_df)]
 
 class keywords(Resource):
     def get(self, key):
@@ -60,27 +84,6 @@ class keywords(Resource):
 
                 return result # no need []            
 
-def pack(i):
-    attrs = ['id', 'category', 'brand_name', 'effective_time',
-            'purpose', 'indications_and_usage', 
-            'active_ingredient', 'inactive_ingredient',
-            'dosage_and_administration', 'warnings']
-
-    temp = {}
-    for attr in attrs:
-        if attr == 'id':
-            temp[attr] = dict_df[i]['label_id']
-        elif attr == 'effective_time': 
-            temp[attr] = dict_df[i]['label_effective_time']
-        else: 
-            temp[attr] = dict_df[i][attr]
-
-    return temp 
-
- 
-                 
-
-
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
@@ -89,7 +92,4 @@ api.add_resource(keywords, '/keywords/<key>')
 
 if __name__ == '__main__':
     # filename = 'bangkit_0323_dataset.json'
-    filename = 'medy-sample-dataset.csv'
-    df = pd.read_csv(filename)
-    dict_df = df.to_dict('records')
     app.run()
