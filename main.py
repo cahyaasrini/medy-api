@@ -4,7 +4,8 @@ from flask_cors import CORS
 import json 
 import pandas as pd
 
-# import recs 
+import recs 
+
 def pack(i, dict_df):
     attrs = ['id', 'category', 'brand_name', 'effective_time',
             'purpose', 'indications_and_usage', 
@@ -84,11 +85,16 @@ class keywords(Resource):
 
                 return result # no need []            
 
+class recommend(Resource):
+    def get(self, id):
+        dict_res = recs.recommend(id) 
+        return [pack(i, dict_res) for i in range(len(dict_res))]
+
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
 api.add_resource(keywords, '/keywords/<key>')
-# api.add_resource(recommend,'/recommend/<string:upc>')
+api.add_resource(recommend,'/recommend/<id>')
 
 if __name__ == '__main__':
     # filename = 'bangkit_0323_dataset.json'

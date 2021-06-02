@@ -20,7 +20,7 @@ def get_vocab():
 
         obj2 = file[i][key]
 
-        vocab += [ obj2[i][str(i)] for i in range(len(obj2))]
+        vocab += [ obj2[i]["indication"] for i in range(len(obj2))]
 
     # print(vocab)
 
@@ -31,15 +31,16 @@ def cosine(a, b):
     b = b.reshape(1, -1)
     return cosine_similarity(a, b)
 
-def recommend(upc_req): 
+def recommend(id_req): 
     filename = 'medy-sample-dataset.csv'
     df = pd.read_csv(filename)
     
-    data = list(df[~df['upc'].isin([upc_req])]['indications_and_usage'].values)
-    upc_data = {i: upc for i, upc in enumerate(list(df[~df['upc'].isin([upc_req])]['upc'].values))}
+    data = list(df[~df['label_id'].isin([id_req])]['indications_and_usage'].values)
+    id_data = {i: id for i, id in enumerate(list(df[~df['label_id'].isin([id_req])]['label_id'].values))}
     # print(upc_data)
 
-    target = list(df[df['upc']==upc_req]['indications_and_usage'].values)
+    target = list(df[df['label_id']==id_req]['indications_and_usage'].values)
+    print('target:', target)
     
     # --------------------------------------------------------------------------------------------------
 
@@ -53,13 +54,16 @@ def recommend(upc_req):
 
     n = 500 
     top = 10 
-    result = {upc_data[i]: cosine(data_vec[i], target_vec[0])[0][0] for i in range(n-1)}
+    result = {id_data[i]: cosine(data_vec[i], target_vec[0])[0][0] for i in range(n-1)}
     result_id = sorted(result, key=result.get, reverse=True)[:top]
 
-    print('target:', df[df['upc']==upc_req]['indications_and_usage'].values)
-    print(df[df.upc.isin(result_id)]['indications_and_usage'].values)
+    print('target:', df[df['label_id']==id_req]['indications_and_usage'].values)
+    print(df[df.label_id.isin(result_id)]['indications_and_usage'].values)
 
-    return result_id 
+    dict_res = df[df.label_id.isin(result_id)].to_dict('records')
+    print(dict_res)
+    
+    return dict_res
 
 # recommend(upc_req)
 

@@ -2,9 +2,6 @@ import pandas as pd
 
 filename = 'medy-sample-dataset.csv'
 df = pd.read_csv(filename).sample(2)
-
-print(list(df['brand_name'].apply(lambda x: x.lower())))
-
 '''
 df = df.to_dict('records')
 
