@@ -63,7 +63,7 @@ class keywords(Resource):
                         num = i
                         print(num)
                 
-                result = file[num]    
+                result = file[num][key]    
 
                 return [result]            
                 
