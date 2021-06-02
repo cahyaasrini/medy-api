@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import json 
+import pandas as pd
 
 app = Flask(__name__)
 api = Api(app)
@@ -45,18 +46,32 @@ class details(Resource):
                 if file[str(i)]['id'] == id:
                     return [file[str(i)]]
 
-class category(Resource):
-    def get(self, cat):
-        filename = 'bangkit_0323_dataset.json'
+class keywords(Resource):
+    def get(self, key):
+        filename = 'vocab.json'
         with open(filename) as f: 
-            file = json.load(f) 
-            n = 10
-            return [file[str(i)] for i in range(len(file)) if file[str(i)]['category'] == cat][:n]
+            file = json.load(f)
+
+            if key == 'all':
+                return file 
+            else:
+                
+                alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+                for i in range(len(alphabet)):
+                    if alphabet[i] == key: 
+                        num = i
+                        print(num)
+                
+                result = file[num]    
+
+                return result            
+                
 
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
-api.add_resource(category, '/category/<cat>')
+api.add_resource(keywords, '/keywords/<key>')
 
 if __name__ == '__main__':
     app.run()
