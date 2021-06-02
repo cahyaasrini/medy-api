@@ -65,7 +65,7 @@ class keywords(Resource):
                 
                 result = file[num][key]    
 
-                return [result]            
+                return result # no need []             
                 
 
 api.add_resource(status, '/')
