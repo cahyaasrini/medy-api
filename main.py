@@ -19,39 +19,61 @@ class status(Resource):
 
 class medicine(Resource):
     def get(self, name):
-        filename = 'bangkit_0323_dataset.json'
-        with open(filename) as f: 
-            file = json.load(f) 
+        df = pd.read_csv(filename)
+        # with open(filename) as f: 
+        #     file = json.load(f) 
 
-            if name == "all":
-                output = [file[str(i)] for i in range(len(file))] 
-                return output 
-            else: 
-                names = [file[str(i)]['brand_name'].lower() for i in range(len(file))] 
+        if name == "all":
+            # output = [file[str(i)] for i in range(len(file))] 
+            # return output
+            df = df.to_dict('records')
+
+            result = []
+            attrs = ['category', 'brand_name', 'effective_time',
+                    'purpose', 'indications_and_usage', 
+                    'active_ingredient', 'inactive_ingredient',
+                    'dosage_and_administration', 'warnings']
+
+            for i in range(len(df)):
+                temp = {}
+                temp['id'] = df[i]['label_id']
                 
-                req = name.lower()
-                show = [] 
-                
-                for i, name in enumerate(names): 
-                    if req in name: 
-                        show.append(file[str(i)])
-    
-                return show[:10]
+                for attr in attrs:
+                    if attr == 'id':
+                        temp[attr] = df[i]['label_id']
+                    elif attr == 'effective_time': 
+                        temp[attr] = df[i]['label_effective_time']
+                    else: 
+                        temp[attr] = df[i][attr]
+
+                result.append(temp)
+
+            return result
+            # print(result)
+        else: 
+            # names = [file[str(i)]['brand_name'].lower() for i in range(len(file))] 
+            names = list(df['brand_name'])
+            req = name.lower()
+            show = [] 
+            
+            for i, name in enumerate(names): 
+                if req in name.lower(): 
+                    show.append(names[i])
+
+            return show[:10]
 
 class details(Resource):
     def get(self, id): 
-        filename = 'bangkit_0323_dataset.json'
         with open(filename) as f: 
             file = json.load(f) 
-        
             for i in range(len(file)):
                 if file[str(i)]['id'] == id:
                     return [file[str(i)]]
 
 class keywords(Resource):
     def get(self, key):
-        filename = 'vocab.json'
-        with open(filename) as f: 
+        vocabfile = 'vocab.json'
+        with open(vocabfile) as f: 
             file = json.load(f)
 
             if key == 'all':
@@ -68,17 +90,16 @@ class keywords(Resource):
                 result = file[num][key]    
 
                 return result # no need []             
-                
-class recommend(Resource):
-    def get(self, upc): 
-        return recs.recommend(int(upc))
+                 
 
 
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
 api.add_resource(keywords, '/keywords/<key>')
-api.add_resource(recommend,'/recommend/<string:upc>')
+# api.add_resource(recommend,'/recommend/<string:upc>')
 
 if __name__ == '__main__':
+    # filename = 'bangkit_0323_dataset.json'
+    filename = 'medy-sample-dataset.csv'
     app.run()
