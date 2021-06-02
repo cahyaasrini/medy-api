@@ -12,10 +12,6 @@ print(filepath)
 
 df = pd.read_csv(filepath)
 
-result = {abj: {i: word.strip() for i, word in enumerate(list(df[abj])) if str(word) != 'nan'} for abj in df.columns}
-
-result = {abj: [word.strip() for word in list(df[abj]) if str(word) != 'nan'] for abj in df.columns}
-
 result = [
             {abj: 
                     [
