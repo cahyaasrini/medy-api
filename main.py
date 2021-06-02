@@ -85,16 +85,23 @@ class keywords(Resource):
 
                 return result # no need []            
 
-class recommend(Resource):
+class recommend1(Resource):
     def get(self, id):
-        dict_res = recs.recommend(id) 
+        dict_res = recs.recommend(id, True) 
+        return [pack(i, dict_res) for i in range(len(dict_res))]
+
+class recommend2(Resource):
+    def get(self, indication):
+        dict_res = recs.recommend(indication, False) 
         return [pack(i, dict_res) for i in range(len(dict_res))]
 
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
 api.add_resource(keywords, '/keywords/<key>')
-api.add_resource(recommend,'/recommend/<id>')
+api.add_resource(recommend1,'/recommend1/<id>')
+api.add_resource(recommend2,'/recommend2/<indication>')
+
 
 if __name__ == '__main__':
     # filename = 'bangkit_0323_dataset.json'
