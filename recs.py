@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics import precision_score
 
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -22,14 +22,14 @@ def get_vocab():
 
         vocab += [ obj2[i]["indication"] for i in range(len(obj2))]
 
-    # print(vocab)
+    print(vocab)
 
     return vocab 
 
-def cosine(a, b): 
-    a = a.reshape(1, -1)
-    b = b.reshape(1, -1)
-    return cosine_similarity(a, b)
+# def cosine(a, b): 
+#     a = a.reshape(1, -1)
+#     b = b.reshape(1, -1)
+#     return cosine_similarity(a, b)
 
 def get_target(id_req, flow):
     filename = 'medy-sample-dataset.csv'
@@ -51,8 +51,9 @@ def recommend(id_req, flow):
     df, data, id_data, target = get_target(id_req, flow)
     
     vocab = get_vocab()
-    cv = CountVectorizer(binary=True, vocabulary=vocab)
-
+    cv = CountVectorizer(binary=True)
+    cv.fit(vocab)
+    print(cv.get_feature_names())
     # --------------------------------------------------------------------------------------------------
 
     data_vec = cv.transform(data).toarray()
@@ -69,7 +70,9 @@ def recommend(id_req, flow):
     print('targ', target)
     print('trgvec', target_vec[0], target_vec[0].shape)
 
-    result = {id_data[i]: cosine(data_vec[i], target_vec[0])[0][0] for i in range(n-1)}
+    # result = {id_data[i]: cosine(data_vec[i], target_vec[0])[0][0] for i in range(n-1)}
+    result = {id_data[i]: precision_score(target_vec[0], data_vec[i], average='binary', zero_division=0) for i in range(n-1)}
+
     print(result)
     
     result_id = sorted(result, key=result.get, reverse=True)[:top]
@@ -80,7 +83,7 @@ def recommend(id_req, flow):
     
     dict_res = df[df.label_id.isin(result_id)].to_dict('records')
 
-    print(dict_res)
+    # print(dict_res)
 
     return dict_res
 
