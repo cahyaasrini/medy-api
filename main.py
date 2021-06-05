@@ -10,7 +10,7 @@ def pack(i, dict_df):
     attrs = ['id', 'category', 'brand_name', 'effective_time',
             'purpose', 'indications_and_usage', 
             'active_ingredient', 'inactive_ingredient',
-            'dosage_and_administration', 'warnings']
+            'dosage_and_administration', 'warnings', 'precision_score']
 
     temp = {}
     for attr in attrs:

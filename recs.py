@@ -66,23 +66,26 @@ def recommend(id_req, flow):
     
     top = 10 
 
-    print('datavec', data_vec[0], data_vec[0].shape)
-    print('targ', target)
-    print('trgvec', target_vec[0], target_vec[0].shape)
+    # print('datavec', data_vec[0], data_vec[0].shape)
+    # print('targ', target)
+    # print('trgvec', target_vec[0], target_vec[0].shape)
 
     # result = {id_data[i]: cosine(data_vec[i], target_vec[0])[0][0] for i in range(n-1)}
     result = {id_data[i]: precision_score(target_vec[0], data_vec[i], average='binary', zero_division=0) for i in range(n-1)}
-
-    print(result)
     
     result_id = sorted(result, key=result.get, reverse=True)[:top]
+    # print(result_id)
 
     # print('target:', df[df['label_id']==id_req]['indications_and_usage'].values)
     # print(df[df.label_id.isin(result_id)]['indications_and_usage'].values)
 
     
-    dict_res = df[df.label_id.isin(result_id)].to_dict('records')
-
+    dict_res = df[df.label_id.isin(result_id)].to_dict('records')        
+    print(dict_res)
+    for i in range(len(dict_res)): 
+        res_id = result_id[i]
+        dict_res[i]['precision_score'] = result[res_id]
+        print(dict_res[i]['brand_name'], dict_res[i]['precision_score'] )
     # print(dict_res)
 
     return dict_res
