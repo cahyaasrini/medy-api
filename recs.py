@@ -22,17 +22,12 @@ def get_vocab():
 
         vocab += [ obj2[i]["indication"] for i in range(len(obj2))]
 
-    print(vocab)
+    # print(vocab)
 
     return vocab 
 
-# def cosine(a, b): 
-#     a = a.reshape(1, -1)
-#     b = b.reshape(1, -1)
-#     return cosine_similarity(a, b)
-
 def get_target(id_req, flow):
-    filename = 'medy-sample-dataset.csv'
+    filename = 'fix-fda-otc.csv'
     df = pd.read_csv(filename)
 
     if flow:
@@ -43,7 +38,7 @@ def get_target(id_req, flow):
     else:  
         data = list(df['indications_and_usage'].values)
         id_data = {i: id for i, id in enumerate(list(df['label_id'].values))}
-        target = [id_req]
+        target = id_req.split(',')
 
     return df, data, id_data, target 
 
@@ -53,8 +48,6 @@ def recommend(id_req, flow):
     vocab = get_vocab()
     cv = CountVectorizer(binary=True)
     cv.fit(vocab)
-    print(cv.get_feature_names())
-    # --------------------------------------------------------------------------------------------------
 
     data_vec = cv.transform(data).toarray()
     target_vec = cv.transform(target).toarray()
@@ -66,39 +59,18 @@ def recommend(id_req, flow):
     
     top = 10 
 
-    # print('datavec', data_vec[0], data_vec[0].shape)
-    # print('targ', target)
-    # print('trgvec', target_vec[0], target_vec[0].shape)
-
-    # result = {id_data[i]: cosine(data_vec[i], target_vec[0])[0][0] for i in range(n-1)}
-    result = {id_data[i]: precision_score(target_vec[0], data_vec[i], average='binary', zero_division=0) for i in range(n-1)}
-    
-    result_id = sorted(result, key=result.get, reverse=True)[:top]
-    # print(result_id)
-
-    # print('target:', df[df['label_id']==id_req]['indications_and_usage'].values)
-    # print(df[df.label_id.isin(result_id)]['indications_and_usage'].values)
-
+    result = {}
+    for i in range(n-1): 
+        ps = precision_score(target_vec[0], data_vec[i], average='binary', zero_division=0)
+        if ps > 0: 
+            result[id_data[i]] = ps 
+  
+    result_id = sorted(result, key=result.get, reverse=True)
     
     dict_res = df[df.label_id.isin(result_id)].to_dict('records')        
-    print(dict_res)
+
     for i in range(len(dict_res)): 
         res_id = result_id[i]
         dict_res[i]['precision_score'] = result[res_id]
-        print(dict_res[i]['brand_name'], dict_res[i]['precision_score'] )
-    # print(dict_res)
 
     return dict_res
-
-# recommend(upc_req)
-
-
-    # print(data_vec.shape)
-    # print(target_vec.shape)
-
-    # print(data_vec[0])
-    # print(target_vec[0])
-    
-        # top10_upc = ['12312', '321321321', '12312312', '12312312312', '321321312']
-
-    # return top10_upc

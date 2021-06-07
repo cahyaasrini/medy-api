@@ -19,9 +19,19 @@ def pack(i, dict_df):
         elif attr == 'effective_time': 
             temp[attr] = dict_df[i]['label_effective_time']
         else: 
-            temp[attr] = dict_df[i][attr]
+            try: 
+                temp[attr] = dict_df[i][attr]
+            except:
+                pass
+            
 
     return temp 
+
+def load_data(): 
+    filename = 'fix-fda-otc.csv'
+    df = pd.read_csv(filename)
+    dict_df = df.to_dict('records')
+    return dict_df
 
 app = Flask(__name__)
 api = Api(app)
@@ -36,12 +46,10 @@ class status(Resource):
 
 class medicine(Resource):
     def get(self, name):
-        filename = 'medy-sample-dataset.csv'
-        df = pd.read_csv(filename)
-        dict_df = df.to_dict('records')
+        dict_df = load_data()
         
         if name == "all":
-            result = [pack(i, dict_df) for i in range(len(df))]
+            result = [pack(i, dict_df) for i in range(len(dict_df))]
             return result
         else: 
             names = list(df['brand_name'])
@@ -56,9 +64,7 @@ class medicine(Resource):
 
 class details(Resource):
     def get(self, id): 
-        filename = 'medy-sample-dataset.csv'
-        df = pd.read_csv(filename)
-        dict_df = df.to_dict('records')
+        dict_df = load_data()
         
         for i in range(len(df)):
             if dict_df[i]['label_id'] == id:
@@ -104,5 +110,4 @@ api.add_resource(recommend2,'/recommend2/<indication>')
 
 
 if __name__ == '__main__':
-    # filename = 'bangkit_0323_dataset.json'
     app.run()
