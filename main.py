@@ -3,14 +3,14 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 import json 
 import pandas as pd
-
 import recs 
 
 def pack(i, dict_df):
-    attrs = ['id', 'category', 'brand_name', 'effective_time',
+    # return a dict version of csv data 
+    attrs = ['id', 'category', 'entities', 'search_precision', 'brand_name', 'effective_time',
             'purpose', 'indications_and_usage', 
             'active_ingredient', 'inactive_ingredient',
-            'dosage_and_administration', 'warnings', 'precision_score']
+            'dosage_and_administration', 'warnings']
 
     temp = {}
     for attr in attrs:
@@ -24,14 +24,13 @@ def pack(i, dict_df):
             except:
                 pass
             
-
     return temp 
 
 def load_data(): 
-    filename = 'fix-fda-otc.csv'
+    filename = 'results.csv'
     df = pd.read_csv(filename)
     dict_df = df.to_dict('records')
-    return dict_df
+    return df, dict_df
 
 app = Flask(__name__)
 api = Api(app)
@@ -40,13 +39,13 @@ CORS(app)
 class status(Resource):
     def get(self):
         try:    
-            return {'data': 'medy-api is running'}
+            return {'data': 'medy-api is running.'}
         except(error):
-            return {'data': 'an error occured during fetching api'}
+            return {'data': 'an error occured during fetching api.'}
 
 class medicine(Resource):
     def get(self, name):
-        dict_df = load_data()
+        df, dict_df = load_data()
         
         if name == "all":
             result = [pack(i, dict_df) for i in range(len(dict_df))]
@@ -64,7 +63,7 @@ class medicine(Resource):
 
 class details(Resource):
     def get(self, id): 
-        dict_df = load_data()
+        df, dict_df = load_data()
         
         for i in range(len(df)):
             if dict_df[i]['label_id'] == id:
@@ -72,42 +71,36 @@ class details(Resource):
 
 class keywords(Resource):
     def get(self, key):
-        vocabfile = 'vocab.json'
-        with open(vocabfile) as f: 
-            file = json.load(f)
+        vocab = recs.get_vocab()
+        res = [cat for cat in vocab.keys() if cat[0]==key]
+        result = [{'category': cat} for cat in res] 
+        return result
 
-            if key == 'all':
-                return file 
-            else:
-                
-                alphabet = 'abcdefghijklmnopqrstuvwxyz'
+class conditions(Resource):
+    def get(self, cat):
+        vocab = recs.get_vocab()
+        result = [{'condition': con} for con in vocab[cat]] 
+        return result            
 
-                for i in range(len(alphabet)):
-                    if alphabet[i] == key: 
-                        num = i
-                        print(num)
-                
-                result = file[num][key]    
-
-                return result # no need []            
-
-class recommend1(Resource):
+class recommend1(Resource): 
     def get(self, id):
-        dict_res = recs.recommend(id, True) 
+        by_id = True
+        dict_res = recs.recommend(id, by_id) 
         return [pack(i, dict_res) for i in range(len(dict_res))]
 
-class recommend2(Resource):
-    def get(self, indication):
-        dict_res = recs.recommend(indication, False) 
+class recommend2(Resource): 
+    def get(self, conditions):
+        by_id = False
+        dict_res = recs.recommend(conditions, by_id) 
         return [pack(i, dict_res) for i in range(len(dict_res))]
 
 api.add_resource(status, '/')
 api.add_resource(medicine, '/medicine/<name>')
 api.add_resource(details, '/details/<id>')
-api.add_resource(keywords, '/keywords/<key>')
-api.add_resource(recommend1,'/recommend1/<id>')
-api.add_resource(recommend2,'/recommend2/<indication>')
-
+api.add_resource(keywords, '/keywords/<key>') # return category by alphabet 
+api.add_resource(conditions, '/conditions/<cat>') # return condition by category 
+api.add_resource(recommend1,'/recommend1/<id>') 
+api.add_resource(recommend2,'/recommend2/<conditions>') 
 
 if __name__ == '__main__':
     app.run()
