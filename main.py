@@ -27,7 +27,8 @@ def pack(i, dict_df):
     return temp 
 
 def load_data(): 
-    filename = 'results.csv'
+    # filename = 'results.csv'
+    filename = 'demo-drugs-v1-result.csv'
     df = pd.read_csv(filename)
     dict_df = df.to_dict('records')
     return df, dict_df
