@@ -22,30 +22,25 @@ Running in [heroku](https://medy-api.herokuapp.com/) and [gcloud](https://medy-3
 
   name = 'Soothe and Cool Moisture Barrier' 
     
-  ```
-  https://medy-315402.et.r.appspot.com/medicine/<name> 
-  ```
+`https://medy-315402.et.r.appspot.com/medicine/<name>`
 
 3.2. Medicine details by id / label_id  
     
    id = '0b8e057f-9834-4d71-8678-8475ec58e891'
-   ```
-   https://medy-315402.et.r.appspot.com/details/<id> 
-   ```
+   
+   `https://medy-315402.et.r.appspot.com/details/<id>`
    
 3.3. Categories by alphabet 
 
    key = 'a' 
-   ```
-   https://medy-315402.et.r.appspot.com/keywords/<key> 
-   ```
+   
+   `https://medy-315402.et.r.appspot.com/keywords/<key>`
 
 3.4. Conditions by category 
 
    cat = 'skin'
-   ```
-   https://medy-315402.et.r.appspot.com/conditions/<cat> 
-   ```
+   
+   `https://medy-315402.et.r.appspot.com/conditions/<cat>`
   
 3.5. Recommendations 
 
@@ -54,13 +49,11 @@ Recommendation code is in `recs.py`
 - by a specific id 
   
    id = '0b8e057f-9834-4d71-8678-8475ec58e891'
-   ```
-   https://medy-315402.et.r.appspot.com/recommend1/<id> 
-   ```
+   
+   `https://medy-315402.et.r.appspot.com/recommend1/<id>`
   
 - by conditions 
 
    conditions = 'cough,fever' 
-   ```
-   https://medy-315402.et.r.appspot.com/recommend2/<conditions> 
-   ```
+   
+   `https://medy-315402.et.r.appspot.com/recommend2/<conditions>`
