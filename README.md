@@ -2,56 +2,59 @@
 
 a simple API to support [*medy*](https://github.com/cahyaasrini/medy-api) android app prototype demo. 
 
-#### Data
-The medicine products data used for *medy* prototype demo is from [here](https://www.kaggle.com/cahyaasrini/openfda-human-otc-drug-labels). 
 
-#### Deployment 
+#### 1. Data
+The medicine products data used by this API is in `demo-drugs-v1-result.csv` file and the source is [here](https://www.kaggle.com/cahyaasrini/openfda-human-otc-drug-labels). 
 
+#### 2. Deployment 
 Running in [heroku](https://medy-api.herokuapp.com/) and [gcloud](https://medy-315402.et.r.appspot.com). 
 
-#### Usage 
+#### 3. Usage 
 
-1. Medicines list 
-    - Get all meds. 
+3.1. Medicine list 
 
-      name = 'all' 
-    - Get a specific one by brand_name 
+- Get all medicine
 
-      name = 'Soothe and Cool Moisture Barrier' 
+  name = 'all'
+
+
+- Get a specific one by brand_name 
+
+  name = 'Soothe and Cool Moisture Barrier' 
     
-      ```
-      https://medy-315402.et.r.appspot.com/medicine/<name> 
-      ```
+  ```
+  https://medy-315402.et.r.appspot.com/medicine/<name> 
+  ```
 
-2. Medicine details by id / label_id  
+3.2. Medicine details by id / label_id  
     
    id = '0b8e057f-9834-4d71-8678-8475ec58e891'
    ```
    https://medy-315402.et.r.appspot.com/details/<id> 
    ```
    
-3. Categories by alphabet 
+3.3. Categories by alphabet 
 
    key = 'a' 
    ```
    https://medy-315402.et.r.appspot.com/keywords/<key> 
    ```
 
-4. Conditions by category 
+3.4. Conditions by category 
 
    cat = 'skin'
    ```
    https://medy-315402.et.r.appspot.com/conditions/<cat> 
    ```
   
-5. Recommendations by a specific id 
+3.5. Recommendations by a specific id 
   
    id = '0b8e057f-9834-4d71-8678-8475ec58e891'
    ```
    https://medy-315402.et.r.appspot.com/recommend1/<id> 
    ```
   
-6. Recommendations by conditions 
+3.6. Recommendations by conditions 
 
    conditions = 'cough,fever' 
    ```
