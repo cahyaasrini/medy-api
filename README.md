@@ -1,6 +1,6 @@
 ## medy API
 
-a simple API to support [*medy*](https://github.com/cahyaasrini/medy-api) android app prototype demo. 
+a simple API to support [*medy*](https://github.com/cahyaasrini/bangkit-medy) android app prototype demo. 
 
 
 #### 1. Data
