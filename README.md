@@ -1,6 +1,8 @@
 ## medy API
 
-a simple API to support [*medy*](https://github.com/cahyaasrini/bangkit-medy) android app prototype demo. 
+A simple API to support [*medy*](https://github.com/cahyaasrini/bangkit-medy) android app prototype demo. Descriptions of the files are as follows: 
+- `main.py`: contains the app runner by using [Flask-RESTful](https://flask-restful.readthedocs.io/en/latest/). 
+- `recs.py`: used to generate the medicine recommendation by calculating the [precision score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html) of the [medicines binary vectors](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html). 
 
 
 #### 1. Data
