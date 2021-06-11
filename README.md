@@ -47,14 +47,18 @@ Running in [heroku](https://medy-api.herokuapp.com/) and [gcloud](https://medy-3
    https://medy-315402.et.r.appspot.com/conditions/<cat> 
    ```
   
-3.5. Recommendations by a specific id 
+3.5. Recommendations 
+
+Recommendation code is in `recs.py`
+
+- by a specific id 
   
    id = '0b8e057f-9834-4d71-8678-8475ec58e891'
    ```
    https://medy-315402.et.r.appspot.com/recommend1/<id> 
    ```
   
-3.6. Recommendations by conditions 
+- by conditions 
 
    conditions = 'cough,fever' 
    ```
